@@ -2,4 +2,15 @@ import { z } from "./src";
 
 z;
 
-console.log(z.string().ip().parse("255.255.255.255"));
+const User = z.object({ name: z.string(), age: z.number() });
+
+const UpdatedUser = User.remap((shape) => ({
+  name: "fullName",
+  age: shape.age.nullable(),
+}));
+type UpdatedUser = z.infer<typeof UpdatedUser>;
+
+const user: UpdatedUser = {
+  fullName: "Betty Brant",
+  age: null,
+};

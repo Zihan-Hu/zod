@@ -1,3 +1,4 @@
+import type { ZodTypeAny } from "..";
 export namespace util {
   type AssertEqual<T, U> = (<V>() => V extends T ? 1 : 2) extends <
     V
@@ -135,6 +136,18 @@ export namespace objectUtil {
   };
 
   export type extendShape<A, B> = flatten<Omit<A, keyof B> & B>;
+
+  // if Augmentation[k] is a string, rename the key in T to that string
+  // otherwise overwrite the key in T with the value in Augmentation
+  export type remap<T, Augmentation extends { [k in keyof T]?: unknown }> = {
+    [k in keyof T as Augmentation[k] extends string
+      ? Augmentation[k]
+      : k]: Augmentation[k] extends string
+      ? T[k]
+      : Augmentation[k] extends ZodTypeAny
+      ? Augmentation[k]
+      : T[k];
+  };
 }
 
 export const ZodParsedType = util.arrayToEnum([
