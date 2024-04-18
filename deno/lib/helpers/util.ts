@@ -1,4 +1,5 @@
 import type { ZodTypeAny } from "../index.ts";
+
 export namespace util {
   type AssertEqual<T, U> = (<V>() => V extends T ? 1 : 2) extends <
     V
